@@ -98,6 +98,7 @@ public class XmlHandler extends DefaultHandler {
      */
     @Override
     public void characters(char ch[], int start, int length) {
+        //multiple occurrences to avoid creating empty doubles
         try {
             if (xmlFett) {
                 bar.setFett(Double.parseDouble(new String(ch, start, length)));
@@ -117,7 +118,7 @@ public class XmlHandler extends DefaultHandler {
             }
         }
         catch(NumberFormatException e){
-            System.out.println("ERROR" + new String(ch, start, length));
+            System.out.println("ERROR READING \'" + new String(ch, start, length) + "\'");
         }
     }
 }

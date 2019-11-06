@@ -5,9 +5,6 @@ import java.util.ArrayList;
 /**
  *
  * This class holds the details of a protein bar.
- *
- * @author  Miguel Mália
- * @version 2019.10.22
  */
 public class ProteinBar {
     private String name;

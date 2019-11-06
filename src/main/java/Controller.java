@@ -5,7 +5,7 @@ import xmlparser.XmlHandler;
 import proteinbar.*;
 
 /**
- *
+ * This is the main class of the application.
  */
 public class Controller {
     private Scanner scan;
@@ -19,11 +19,10 @@ public class Controller {
         view = new View();
         scan = new Scanner(System.in);
         proteinBars = new ArrayList<>(XmlHandler.readProteinBarList("src/main/resources/"));
-
     }
 
     /**
-     *
+     * This method represents the main menu of the application.
      */
     public void start() {
         view.printWelcome();
@@ -96,7 +95,7 @@ public class Controller {
     }
 
     /**
-     * Sort bars based on highest protein content
+     * Sort bars based on highest protein content.
      */
     public void sortBarsByProtein() {
         proteinBars.stream()
@@ -129,7 +128,8 @@ public class Controller {
 
     /**
      * Find all protein bars with more than X protein reviewed by Y (X and Y should be entered from the user).
-     * @param protein
+     * @param protein number of proteins
+     * @param user ID of the reviewer
      */
     public void filterBarsByProteinAndUser(int protein, String user) {
         proteinBars.stream()

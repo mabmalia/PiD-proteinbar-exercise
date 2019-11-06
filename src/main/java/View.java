@@ -43,7 +43,7 @@ public class View {
     }
 
     /**
-     * Print out the main menu to the user.
+     * Print message requesting a person ID.
      */
     public void printPersonId(){
         System.out.println("Type the Id of a person to check the bars reviewed:");
