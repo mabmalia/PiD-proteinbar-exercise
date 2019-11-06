@@ -1,10 +1,11 @@
 package xmlparser;
 
 import org.xml.sax.Attributes;
-import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
-import proteinbar.ProteinBar;
-import proteinbar.Review;
+import proteinbar.*;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+import java.util.ArrayList;
 
 /**
  * This class handles the data inside the XML file.
@@ -16,22 +17,41 @@ public class XmlHandler extends DefaultHandler {
     private boolean xmlProtein = false;
     private boolean xmlFiber = false;
     private ProteinBar bar;
+    private static ArrayList<ProteinBar> proteinBars;
 
     /**
-     *
+     * Returns the XML protein bar list.
+     * @return a protein bar list.
+     */
+    public static ArrayList<ProteinBar> readProteinBarList(String xmlPath) {
+        proteinBars = new ArrayList<>();
+
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser saxParser = factory.newSAXParser();
+            XmlHandler xmlHandler = new XmlHandler();
+            saxParser.parse(xmlPath + "bars.xml", xmlHandler);
+
+        }
+        catch (Exception e) {
+            return null;
+        }
+        return proteinBars;
+    }
+
+    /**
+     * Method called at the start of a document element.
      * @param uri
      * @param localName
      * @param qName
      * @param attributes
-     * @throws SAXException
      */
     @Override
     public void startElement(
-            String uri, String localName, String qName, Attributes attributes)
-            throws SAXException {
+            String uri, String localName, String qName, Attributes attributes) {
 
         if (qName.contains("BAR")) {
-            bar = new ProteinBar(qName.replace("BAR"," BAR"));
+            bar = new ProteinBar(qName);
         }
         else if (qName.equalsIgnoreCase("fett")) {
             xmlFett = true;
@@ -54,30 +74,30 @@ public class XmlHandler extends DefaultHandler {
     }
 
     /**
-     *
+     * Method called at the end of a document element.
      * @param uri
      * @param localName
      * @param qName
-     * @throws SAXException
      */
     @Override
     public void endElement(String uri,
-                           String localName, String qName) throws SAXException {
+                           String localName, String qName) {
 
         if (qName.contains("BAR")) {
-            XmlParser.addProteinBar(bar);
+            //add a protein bar to the list
+            proteinBars.add(bar);
         }
     }
 
     /**
-     *
+     * Method called with the text contents
+     *  in between the start and end tags of an XML document element.
      * @param ch
      * @param start
      * @param length
-     * @throws SAXException
      */
     @Override
-    public void characters(char ch[], int start, int length) throws SAXException {
+    public void characters(char ch[], int start, int length) {
         try {
             if (xmlFett) {
                 bar.setFett(Double.parseDouble(new String(ch, start, length)));

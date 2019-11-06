@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
+import xmlparser.XmlHandler;
 import proteinbar.*;
-import xmlparser.XmlParser;
 
 /**
  *
@@ -10,33 +10,25 @@ import xmlparser.XmlParser;
 public class Controller {
     private Scanner scan;
     public ArrayList<ProteinBar> proteinBars;
+    View view;
 
     /**
      * Controller constructor.
      */
     public Controller() {
+        view = new View();
         scan = new Scanner(System.in);
-        proteinBars = new ArrayList<>();
+        proteinBars = new ArrayList<>(XmlHandler.readProteinBarList("src/main/resources/"));
 
-        //read XML file and fetch data
-        XmlParser parseXML = new XmlParser();
-        addAllBars(parseXML.xmlParser());
-    }
-
-    /**
-     * Print out a Welcome message to the user.
-     */
-    private void printWelcome() {
-        System.out.println("Welcome to our Protein bar catalogue!");
     }
 
     /**
      *
      */
     public void start() {
-        printWelcome();
+        view.printWelcome();
         while (true) {
-            printMenu();
+            view.printMenu();
             switch (userInput()) {
                 case "1":
                     // show the list of protein bar names
@@ -53,27 +45,26 @@ public class Controller {
                 case "4":
                     // Filter bars which has less than"some number from the user" fiber
                     // and sort them from highest to lowest.
-                    System.out.println("Please, type in the maximum amount of fiber you want in your bar:");
+                    view.quantityOfChar("maximum", "fiber");
                     filterBarsByFiber(convertIndexToInt(userInput()));
                     break;
                 case "5":
                     // Find all protein bars with more than X protein
                     // reviewed by Y (X and Y should be entered from the user).
-                    System.out.println("Please, type in the minimum amount of protein you want in your bar:");
+                    view.quantityOfChar("minimum", "protein");
                     int userProtein = convertIndexToInt(userInput());
                     if (userProtein != -1){
-                        System.out.println("Type the Id of a person to check the bars reviewed:");
+                        view.printPersonId();
                         filterBarsByProteinAndUser(userProtein, userInput());
                     }
                     else{
                         System.out.println("Invalid protein number.");
                     }
-
                     break;
                 case "6":
                     return;
                 default:
-                    System.out.println("Sorry, invalid option.");
+                    view.printInvalidInput();
             }
             printReturnMenu();
         }
@@ -85,18 +76,6 @@ public class Controller {
     public void printReturnMenu() {
         System.out.println("Please, press Enter to return to the menu");
         userInput();
-    }
-
-    /**
-     * Print out the main menu to the user.
-     */
-    private void printMenu() {
-        System.out.println("Pick an option:");
-        String[] actions = {"(1) Show protein bars names", "(2) Sort by protein content", "(3) Sort by fat content",
-                "(4) Filter by fiber content", "(5) Filter by protein and date", "(6) Quit"};
-        for (int i = 0; i < actions.length; i++) {
-            System.out.println(actions[i]);
-        }
     }
 
     /**
