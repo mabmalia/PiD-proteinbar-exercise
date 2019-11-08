@@ -36,16 +36,23 @@ public class View {
     public void printMenu() {
         System.out.println("Pick an option:");
         String[] actions = {"(1) Show protein bars names", "(2) Sort by protein content", "(3) Sort by fat content",
-                "(4) Filter by fiber content", "(5) Filter by protein and date", "(6) Quit"};
+                "(4) Filter by fiber content", "(5) Show protein bar reviews", "(6) Quit"};
         for (int i = 0; i < actions.length; i++) {
             System.out.println(actions[i]);
         }
     }
 
     /**
-     * Print message requesting a person ID.
+     * Print a message asking for any input to return to the main menu
      */
-    public void printPersonId(){
-        System.out.println("Type the Id of a person to check the bars reviewed:");
+    public void printReturnMenu() {
+        System.out.println("Please, press Enter to return to the menu.");
+    }
+
+    /**
+     * Print message requesting a bar name.
+     */
+    public void printAskBarName(){
+        System.out.println("Type the name of a protein bar to check its reviews:");
     }
 }

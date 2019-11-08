@@ -12,38 +12,38 @@ public class Review {
     private int score;
 
     /**
-     * Create a review.
+     * Create a review just with person ID.
      *
      * @param personId The person ID.
      */
-    public Review(String personId, LocalDate date, int score) {
+    public Review(String personId) {
         this.personId = personId;
+    }
+
+    /**
+     * Sets the date of the review.
+     * @param date the date of the review as a LocalDate.
+     */
+    public void setDate(LocalDate date) {
         this.date = date;
+    }
+
+    /**
+     * Sets the score of the review.
+     * @param score the score of the review as an int.
+     */
+    public void setScore(int score) {
         this.score = score;
     }
 
     /**
-     * Return the reviewer ID. of the review.
-     * @return the reviewer ID as a String.
+     * Return a detailed description of the review.
      */
-    public String getPersonID()
-    {
-        return personId;
-    }
-
-    /**
-     * Return the date of the review.
-     * @return the date of the review as a LocalDate.
-     */
-    public LocalDate getDate() {
-        return date;
-    }
-
-    /**
-     * Return the score of the review.
-     * @return the score of the review as a int.
-     */
-    public int getScore() {
-        return score;
+    @Override
+    public String toString() {
+        return "personId = '" + personId +
+                "\', date = '" + date +
+                "\', score ='" + score +
+                "\'";
     }
 }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Scanner;
+import util.Utility;
 import xmlparser.XmlHandler;
 import proteinbar.*;
 
@@ -8,16 +9,14 @@ import proteinbar.*;
  * This is the main class of the application.
  */
 public class Controller {
-    private Scanner scan;
-    public ArrayList<ProteinBar> proteinBars;
-    View view;
+    private ArrayList<ProteinBar> proteinBars;
+    private View view;
 
     /**
      * Controller constructor.
      */
     public Controller() {
         view = new View();
-        scan = new Scanner(System.in);
         proteinBars = new ArrayList<>(XmlHandler.readProteinBarList("src/main/resources/"));
     }
 
@@ -45,36 +44,21 @@ public class Controller {
                     // Filter bars which has less than"some number from the user" fiber
                     // and sort them from highest to lowest.
                     view.quantityOfChar("maximum", "fiber");
-                    filterBarsByFiber(convertIndexToInt(userInput()));
+                    filterBarsByFiber(Utility.convertIndexToInt(userInput()));
                     break;
                 case "5":
-                    // Find all protein bars with more than X protein
-                    // reviewed by Y (X and Y should be entered from the user).
-                    view.quantityOfChar("minimum", "protein");
-                    int userProtein = convertIndexToInt(userInput());
-                    if (userProtein != -1){
-                        view.printPersonId();
-                        filterBarsByProteinAndUser(userProtein, userInput());
-                    }
-                    else{
-                        System.out.println("Invalid protein number.");
-                    }
+                    // Show all reviews of a specific bar.
+                    view.printAskBarName();
+                    showReviewsByBar(userInput());
                     break;
                 case "6":
                     return;
                 default:
                     view.printInvalidInput();
             }
-            printReturnMenu();
+            view.printReturnMenu();
+            userInput();
         }
-    }
-
-    /**
-     * Print a message asking for any input to return to the main menu
-     */
-    public void printReturnMenu() {
-        System.out.println("Please, press Enter to return to the menu");
-        userInput();
     }
 
     /**
@@ -82,6 +66,7 @@ public class Controller {
      * @return user input as a String.
      */
     public String userInput() {
+        Scanner scan = new Scanner(System.in);
         return scan.nextLine();
     }
 
@@ -119,47 +104,28 @@ public class Controller {
      * @param filter
      */
     public void filterBarsByFiber(int filter) {
-        proteinBars.stream()
-                .filter(bars -> bars.getFiber() < filter)
-                .sorted(Comparator.comparing(ProteinBar::getFiber).reversed())
-                .map(ProteinBar::toString)
-                .forEach(System.out::println);
-    }
-
-    /**
-     * Find all protein bars with more than X protein reviewed by Y (X and Y should be entered from the user).
-     * @param protein number of proteins
-     * @param user ID of the reviewer
-     */
-    public void filterBarsByProteinAndUser(int protein, String user) {
-        proteinBars.stream()
-                .filter(bars -> bars.getProtein() >= protein)
-                .filter(bars -> bars.getPersonID(user))
-                .map(ProteinBar::toString)
-                .forEach(System.out::println);
-    }
-
-    /**
-     *
-     * @param proteinBars
-     */
-    public void addAllBars(ArrayList<ProteinBar> proteinBars) {
-        this.proteinBars.addAll(proteinBars);
-    }
-
-    /**
-     * Collect accurate user input, that can be turned into int, otherwise return -1
-     * @param number
-     * @return
-     */
-    private int convertIndexToInt(String number) {
-        int convertedIndex;
-        try {
-            convertedIndex = Integer.parseInt(number);
-            return convertedIndex;
-        } catch (NumberFormatException e) {
-            return -1;
+        if (filter != -1) {
+            proteinBars.stream()
+                    .filter(bars -> bars.getFiber() < filter)
+                    .sorted(Comparator.comparing(ProteinBar::getFiber).reversed())
+                    .map(ProteinBar::toString)
+                    .forEach(System.out::println);
         }
+        else{
+            view.printInvalidInput();
+        }
+    }
+
+    /**
+     * Show all the reviews of a specific protein bar.
+     * @param name nane of protein bar.
+     */
+    public void showReviewsByBar(String name) {
+        proteinBars.stream()
+                .filter(bars -> bars.getName().equals(name))
+                .map(ProteinBar::getReviews)
+                .flatMap(ArrayList::stream)
+                .forEach(System.out::println);
     }
 
     /**

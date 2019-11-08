@@ -16,32 +16,21 @@ public class ProteinBar {
     private ArrayList<Review> reviews;
 
     /**
-     * Create a protein bar.
-     *
-     * @param name The bar name.
-     * @param fett The bar fat.
-     * @param energy The bar energy.
-     * @param kolhydrat The bar kolhydrat.
-     * @param protein The bar protein.
-     * @param fiber The bar fiber.
-     */
-    public ProteinBar(String name, double fett, double energy, double kolhydrat, double protein, double fiber){
-        this.name = name;
-        this.fett = fett;
-        this.energy = energy;
-        this.kolhydrat = kolhydrat;
-        this.protein = protein;
-        this.fiber = fiber;
-        reviews = new ArrayList<>();
-    }
-
-    /**
-     * Create a protein bar just with name and serial number
+     * Create a protein bar just with name.
      * @param name
      */
     public ProteinBar(String name){
         this.name = name;
         reviews = new ArrayList<>();
+    }
+
+    /**
+     * Return the reviews of the bar.
+     * @return a list of reviews.
+     */
+    public ArrayList<Review> getReviews()
+    {
+        return reviews;
     }
 
     /**
@@ -126,17 +115,6 @@ public class ProteinBar {
      */
     public void addReview(Review review) {
         reviews.add(review);
-    }
-
-    /**
-     * Return a detailed description of the protein bar.
-     */
-    public boolean getPersonID(String user) {
-        long countPerson = reviews.stream()
-                            .filter(review -> review.getPersonID().equals(user))
-                            .count();
-
-        return countPerson > 0 ? true : false;
     }
 
     /**

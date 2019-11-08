@@ -3,6 +3,8 @@ package xmlparser;
 import org.xml.sax.Attributes;
 import org.xml.sax.helpers.DefaultHandler;
 import proteinbar.*;
+import util.Utility;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import java.util.ArrayList;
@@ -11,12 +13,16 @@ import java.util.ArrayList;
  * This class handles the data inside the XML file.
  */
 public class XmlHandler extends DefaultHandler {
+    private ProteinBar bar;
     private boolean xmlFett = false;
     private boolean xmlEnergy = false;
     private boolean xmlKolhydrat = false;
     private boolean xmlProtein = false;
     private boolean xmlFiber = false;
-    private ProteinBar bar;
+
+    private Review review;
+    private boolean xmlDate = false;
+    private boolean xmlScore = false;
     private static ArrayList<ProteinBar> proteinBars;
 
     /**
@@ -69,7 +75,13 @@ public class XmlHandler extends DefaultHandler {
             xmlFiber = true;
         }
         else if (qName.equalsIgnoreCase("reviewer")){
-            bar.addReview(new Review(attributes.getValue("personID")));
+            review = new Review(attributes.getValue("personID"));
+        }
+        else if (qName.equalsIgnoreCase("date")){
+            xmlDate = true;
+        }
+        else if (qName.equalsIgnoreCase("score")){
+            xmlScore = true;
         }
     }
 
@@ -86,6 +98,9 @@ public class XmlHandler extends DefaultHandler {
         if (qName.contains("BAR")) {
             //add a protein bar to the list
             proteinBars.add(bar);
+        }
+        else if (qName.equalsIgnoreCase("reviewer")){
+            bar.addReview(review);
         }
     }
 
@@ -115,6 +130,12 @@ public class XmlHandler extends DefaultHandler {
             } else if (xmlFiber) {
                 bar.setFiber(Double.parseDouble(new String(ch, start, length)));
                 xmlFiber = false;
+            } else if (xmlDate) {
+                review.setDate(Utility.convertDate(new String(ch, start, length)));
+                xmlDate = false;
+            } else if (xmlScore) {
+                review.setScore(Integer.parseInt(new String(ch, start, length)));
+                xmlScore = false;
             }
         }
         catch(NumberFormatException e){
