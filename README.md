@@ -1,4 +1,4 @@
-# PiD Exercise 2 - XML
+# Programming in depth - Exercise 2 - XML
 
 ## Description
 
