@@ -10,11 +10,11 @@ Write Java code with the following functionalities (text interface program as th
 
 Extract the information from the XML file into a data structure of your choice.
 After that give the user the ability to choose from the following options:
-Show the name of all bars.
-Sort bars based on highest protein content.
-Sort bars based on highest fat content.
-Filter bars which has less than "some number from the user" fiber and sort them from highest to lowest.
-Find all protein bars with more than X protein reviewed by Y (X and Y should be entered from the user).
+1. Show the name of all bars.
+2. Sort bars based on highest protein content.
+3. Sort bars based on highest fat content.
+4. Filter bars which has less than "some number from the user" fiber and sort them from highest to lowest.
+5. Find all protein bars with more than X protein reviewed by Y (X and Y should be entered from the user).
 
 ## Open question
 
